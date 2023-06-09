@@ -1,0 +1,25 @@
+# One CLI to format the code tree - https://github.com/numtide/treefmt
+
+[formatter.nix]
+command = "nixpkgs-fmt"
+includes = [ "*.nix"]
+
+[formatter.shell]
+command = "shfmt"
+options = [
+    "-i",
+    "2",  # indent 2
+    "-s",  # simplify the code
+    "-w",  # write back to the file
+]
+includes = ["*.sh"]
+excludes = ["./scripts/hetzner-dedicated-wipe-and-install-nixos.sh"]
+
+[formatter.shellcheck]
+command = "shellcheck"
+includes = ["*.sh"]
+excludes = ["./scripts/hetzner-dedicated-wipe-and-install-nixos.sh"]
+
+[formatter.python]
+command = "black"
+includes = ["*.py"]
