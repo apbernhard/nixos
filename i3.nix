@@ -29,7 +29,6 @@ in
       extraPackages = with pkgs; [
         dmenu
         i3status
-        i3lock
       ];
     };
     # keymap in X11
@@ -39,6 +38,11 @@ in
   };
   home-manager.users.mainUser = {
 
+    programs.i3status = {
+      enable = true;
+      modules = {
+      };
+    };
     programs.kitty = {
       enable = true;
       theme = "Gruvbox Light Hard";
@@ -88,9 +92,6 @@ in
       extraConfig = ''
         default_border pixel 
 
-        # lock screen
-        # set $i3lockwall i3lock -t
-
         # workspace config
         set $terms "1: terms"
         set $web "2: web"
@@ -104,10 +105,10 @@ in
         # power and login menu
         set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (CTRL+s) shutdown
         mode "$mode_system" {
-          bindsym l exec --no-startup-id $i3lockwall, mode "default"
+        #  bindsym l exec --no-startup-id $i3lockwall, mode "default"
           bindsym e exec --no-startup-id i3-msg exit, mode "default"
-          bindsym s exec --no-startup-id $i3lockwall && systemctl suspend, mode "default"
-          bindsym h exec --no-startup-id $i3lockwall && systemctl hibernate, mode "default"
+        #  bindsym s exec --no-startup-id $i3lockwall && systemctl suspend, mode "default"
+        #  bindsym h exec --no-startup-id $i3lockwall && systemctl hibernate, mode "default"
           bindsym r exec --no-startup-id systemctl reboot, mode "default"
           bindsym Ctrl+s exec --no-startup-id systemctl poweroff -i, mode "default"
           bindsym Return mode "default"
@@ -123,84 +124,6 @@ in
           names = [ "JetBrains Mono" ];
           size = 8.0;
         };
-        #        bars =
-        #          with colorTheme;
-        #          let
-        #            selected = blue;
-        #          in
-        #          [{
-        #            hiddenState = "hide";
-        #            position = "top";
-        #            workspaceButtons = true;
-        #            workspaceNumbers = true;
-        #            statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${config.users.users.mainUser.home}/.config/i3status-rust/config-my.toml";
-        #            fonts = {
-        #              names = [ "JetBrains Mono" ];
-        #              size = 11.0;
-        #            };
-        #            trayOutput = "primary";
-        #            colors = {
-        #              background = background;
-        #              statusline = background;
-        #              separator = background;
-        #              focusedWorkspace = {
-        #                border = selected;
-        #                background = base02;
-        #                text = foreground;
-        #              };
-        #              activeWorkspace = {
-        #                border = background;
-        #                background = base02;
-        #                text = foreground;
-        #              };
-        #              inactiveWorkspace = {
-        #                border = background;
-        #                background = base02;
-        #                text = foreground;
-        #              };
-        #              urgentWorkspace = {
-        #                border = red;
-        #                background = base02;
-        #                text = foreground;
-        #              };
-        #              bindingMode = {
-        #                border = red;
-        #                background = red;
-        #                text = background;
-        #              };
-        #            };
-        #          }];
-        #        colors = with colorTheme; {
-        #          background = background;
-        #          focused = {
-        #            background = blue;
-        #            border = blue;
-        #            childBorder = blue;
-        #            indicator = blue;
-        #            text = foreground;
-        #          };
-        #          focusedInactive = {
-        #            background = base01;
-        #            border = base01;
-        #            childBorder = base02;
-        #            indicator = base02;
-        #            text = foreground;
-        #          };
-        #          unfocused = {
-        #            background = base02;
-        #            border = base02;
-        #            childBorder = base02;
-        #            indicator = base02;
-        #            text = foreground;
-        #          };
-        #          urgent = {
-        #            background = orange;
-        #            border = orange;
-        #            childBorder = background;
-        #            indicator = background;
-        #            text = foreground;
-        #          };
-        #        };
         keybindings = {
           "${cfg.config.modifier}+Return" = "exec ${cfg.config.terminal}";
           "${cfg.config.modifier}+Shift+q" = "exit";
@@ -257,37 +180,6 @@ in
           "${cfg.config.modifier}+Shift+0" = "move container to workspace number 10";
 
           "${cfg.config.modifier}+Escape" = "workspace back_and_forth";
-
-          # lock screen
-          #          "${cfg.config.modifier}+Ctrl+Shift+l" = "exec --no-startup-id $i3lockwall";
-
-          # rename workspace
-          "${cfg.config.modifier}+n" = ''
-            exec i3-input -F 'rename workspace to "%s"' -P 'New name for this workspace: '
-          '';
-
-          #          "${cfg.config.modifier}+grave" =
-          #            let
-          #              script = pkgs.writers.writeBash "select-workspace" ''
-          #                set -e
-          #                set -o pipefail
-          #                ${pkgs.i3}/bin/i3-msg -t get_workspaces | \
-          #                ${pkgs.jq}/bin/jq --raw-output '.[] | .name' | \
-          #                ${pkgs.rofi}/bin/rofi -dmenu -p 'Select Workspace' | \
-          #                while read line
-          #                do
-          #                  ${pkgs.i3}/bin/i3-msg workspace "$line"
-          #                done
-          #              '';
-          #            in
-          #            "exec ${script}";
-          #
-          #          "${cfg.config.modifier}+Shift+c" = "reload";
-          #          "${cfg.config.modifier}+Shift+r" = "restart";
-          #
-          #          "${cfg.config.modifier}+r" = "mode resize";
-          #
-          #          "${cfg.config.modifier}+a" = "exec ${pkgs.i3-easyfocus}/bin/i3-easyfocus";
         };
       };
     };
