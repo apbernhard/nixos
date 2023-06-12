@@ -20,7 +20,7 @@ in
       lightdm.enable = true;
       autoLogin = {
         enable = true;
-        user = "mainUser";
+        user = config.users.users.mainUser.name;
       };
       defaultSession = "none+i3";
     };
@@ -40,20 +40,26 @@ in
 
     programs.i3status = {
       enable = true;
-      modules = {
-      };
+#      enableDefault = false;
+      modules."tztime local".format = "%d.%m.%Y %H:%M";
+#      modules."volume master".position = 1;
+#      modules."disk /" = {
+#        position = 2;
+#        settings = {format = "%percentage_free";};
+#        };
     };
     programs.kitty = {
       enable = true;
       theme = "Gruvbox Light Hard";
-      settings = {
-        font_family = "JetBrains Mono";
-        bold_font = "auto";
-        italic_font = "auto";
-        bold_italic_font = "auto";
-        font_size = 8;
-      };
+      font.name = "FiraCodeNerdFont";
     };
+    #      settings = {
+    #        font_family = "JetBrains Mono";
+    #        bold_font = "auto";
+    #        italic_font = "auto";
+    #        bold_italic_font = "auto";
+    #        font_size = 8;
+    #      };
 
     programs.alacritty = {
       enable = true;
@@ -70,15 +76,15 @@ in
           [ "${themes}/themes/gruvbox_light.yaml" ];
         font = {
           normal = {
-            family = "Courier New";
+            family = "FiraCodeNerdFont";
             style = "Regular";
           };
           bold = {
-            family = "Courier New";
+            family = "FiraCode";
             style = "Bold";
           };
           italic = {
-            family = "Courier New";
+            family = "FiraCode";
             style = "Italic";
           };
           size = 8.0;
@@ -90,7 +96,7 @@ in
     xsession.windowManager.i3 = {
       enable = true;
       extraConfig = ''
-        default_border pixel 
+        default_border normal
 
         # workspace config
         set $terms "1: terms"
@@ -121,9 +127,19 @@ in
         modifier = "Mod4";
         terminal = "alacritty";
         fonts = {
-          names = [ "JetBrains Mono" ];
+          names = [ "FiraCodaNerdFonts" ];
           size = 8.0;
         };
+        bars = [{
+          position = "top";
+          workspaceButtons = true;
+          workspaceNumbers = false;
+          statusCommand = "i3status";
+          fonts = {
+            names = [ "FiraCodaNerdFonts" ];
+            size = 11.0;
+          };
+        }];
         keybindings = {
           "${cfg.config.modifier}+Return" = "exec ${cfg.config.terminal}";
           "${cfg.config.modifier}+Shift+q" = "exit";
